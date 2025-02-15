@@ -1,0 +1,7 @@
+/home/augusto/projects/MITSP/build-release/CMakeFiles/mitsp.dir
+/home/augusto/projects/MITSP/build-release/CMakeFiles/edit_cache.dir
+/home/augusto/projects/MITSP/build-release/CMakeFiles/rebuild_cache.dir
+/home/augusto/projects/MITSP/build-release/CMakeFiles/list_install_components.dir
+/home/augusto/projects/MITSP/build-release/CMakeFiles/install.dir
+/home/augusto/projects/MITSP/build-release/CMakeFiles/install/local.dir
+/home/augusto/projects/MITSP/build-release/CMakeFiles/install/strip.dir

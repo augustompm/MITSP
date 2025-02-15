@@ -1,0 +1,1 @@
+/usr/bin/c++ -O3 -DNDEBUG CMakeFiles/mitsp.dir/src/mainMITSP.cpp.o -o bin/mitsp  -lm 
