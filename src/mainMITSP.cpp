@@ -137,7 +137,7 @@ class MiTSP2OptDynProg {
  }
 
  static void BestImprovement2Opt() {
-   float best, actual;
+   float best, best2=1, actual;
    int i, j, flag = 1, bestI, bestJ, cont = 0;
    while (flag == 1) {
      flag = 0;
@@ -157,6 +157,9 @@ class MiTSP2OptDynProg {
      }
      if (bestI != -1) {
        cont++;
+       cout << cont << " " << best << " " <<endl;
+
+
        N2Opt(bestI, bestJ);
      }
    }
@@ -241,7 +244,7 @@ class MiTSP2OptDynProg {
 
  static void MultiImprovement2Opt() {
    int cont = 0;
-   float acc_gain;
+   float acc_gain =0, acc_gain2=1;
    while (1) {
      acc_gain = 0;
      DynamicProgramming2Opt();
@@ -255,6 +258,8 @@ class MiTSP2OptDynProg {
        N2Opt((*w).first, (*w).second);
        update2OptInternalMoves(*w);
      }
+     cout << cont << " " << acc_gain << " " << acc_gain2 << " " << acc_gain / acc_gain2  <<" "<< endl;
+     acc_gain2 = acc_gain;      
    }
  }
 };
