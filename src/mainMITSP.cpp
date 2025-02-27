@@ -9,13 +9,16 @@
 #include <vector>
 #include <array>
 #include <string.h>
+#include <fstream>
 
 using namespace std;
 
 class TSPProblemData {
  public:
   static mt19937 seed;
-  static constexpr int N = 318;
+  // static constexpr int N = 318;
+  static constexpr int N = 52;
+  // static constexpr int N = 783;
   static float xInstance[N];
   static float yInstance[N];
   static array<int, N> Solution;
@@ -74,7 +77,9 @@ class TSPProblemData {
    int c;
    char line[1024];
 
-   input = fopen("instances/lin318.tsp", "r");
+   // input = fopen("instances/lin318.tsp", "r");
+   input = fopen("instances/berlin52.tsp", "r");
+   // input = fopen("instances/rat783.tsp", "r");
    if (!input) {
        printf("Erro ao abrir arquivo instances/lin318.tsp\n");
        exit(1);
@@ -139,6 +144,7 @@ class MiTSP2OptDynProg {
  static void BestImprovement2Opt() {
    float best, best2=1, actual;
    int i, j, flag = 1, bestI, bestJ, cont = 0;
+   std::vector<float> gains;
    while (flag == 1) {
      flag = 0;
      best = 0;
@@ -157,12 +163,24 @@ class MiTSP2OptDynProg {
      }
      if (bestI != -1) {
        cont++;
-       cout << cont << " " << best << " " <<endl;
-
+      gains.push_back(best);
 
        N2Opt(bestI, bestJ);
      }
    }
+
+  // accumulate all gains, then reduce one by one to zero (except last)
+   float fo = 0;
+   for(auto& v: gains) {
+    fo += v;
+   }
+   float backup_fo = fo;
+    std::ofstream file{"output_bi.txt"};
+   for(int i=0; i<int(gains.size())-1; i++) {
+     // file << i+1 << " " << gains[i]/fo << " " << gains[i]/backup_fo <<endl;
+     file << i+1 << " " << gains[i]/backup_fo <<endl;
+   fo -= gains[i];
+  }
  }
 
  static void update2OptInternalMoves(pair<int, int> move) {
@@ -245,6 +263,7 @@ class MiTSP2OptDynProg {
  static void MultiImprovement2Opt() {
    int cont = 0;
    float acc_gain =0, acc_gain2=1;
+    std::vector<float> gains;
    while (1) {
      acc_gain = 0;
      DynamicProgramming2Opt();
@@ -258,10 +277,24 @@ class MiTSP2OptDynProg {
        N2Opt((*w).first, (*w).second);
        update2OptInternalMoves(*w);
      }
-     cout << cont << " " << acc_gain << " " << acc_gain2 << " " << acc_gain / acc_gain2  <<" "<< endl;
-     acc_gain2 = acc_gain;      
+     // file << cont << " " << acc_gain << " " << acc_gain2 << " " << acc_gain / acc_gain2  <<" "<< endl;
+     gains.push_back(acc_gain);
+     // acc_gain2 = acc_gain;      
    }
- }
+      // accumulate all gains, then reduce one by one to zero (except last)
+      float fo = 0;
+      for(auto& v: gains) {
+       fo += v;
+      }
+      float backup_fo = fo;
+       std::ofstream file{"output_mi.txt"};
+      for(int i=0; i<int(gains.size())-1; i++) {
+         // file << i+1 << " " << gains[i]/fo << " " << gains[i]/backup_fo <<endl;
+         file << i+1 << " " << gains[i]/backup_fo <<endl;
+      fo -= gains[i];
+      }
+
+  }
 };
 
 mt19937 TSPProblemData::seed;
